@@ -1,25 +1,58 @@
-import React , { useState }from 'react'
+import React, { useState } from 'react'
+import { Brightness7, Brightness4, Menu, Close } from '@mui/icons-material'
 import './header.css'
-import Mobile from './mobile'
-import Web from './web'
-import MenuIcon from '@mui/icons-material/Menu';
 
-function Header() {
-  const [isOpen, setIsOpen] = useState(false);
+const Header = ({ darkMode, setDarkMode }) => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
+  const handleScroll = (id) => {
+    const element = document.getElementById(id)
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' })
+      setMobileMenuOpen(false)
+    }
+  }
+
   return (
-    <div className='header'>
-      <div className='logo'>Portfolio</div>
-      <div className='menu'>
-        <div className='web-menu'>
-          <Web />
-        </div>
-        <div className='mobile-menu'>
-          <div onClick={()=>setIsOpen(!isOpen)}><MenuIcon className="menu-icon" /></div>
-          
-          {isOpen && <Mobile isOpen={isOpen} setIsOpen={ setIsOpen}/>}
+    <header className={`header ${darkMode ? 'dark' : 'light'}`}>
+      <div className="header-container">
+        <div className="logo">Portfolio</div>
+
+        <nav className={`nav ${mobileMenuOpen ? 'active' : ''}`}>
+          <a onClick={() => handleScroll('hero')} className="nav-link">
+            Home
+          </a>
+          <a onClick={() => handleScroll('about')} className="nav-link">
+            About
+          </a>
+          <a onClick={() => handleScroll('projects')} className="nav-link">
+            Projects
+          </a>
+          <a onClick={() => handleScroll('skills')} className="nav-link">
+            Skills
+          </a>
+          <a onClick={() => handleScroll('contact')} className="nav-link">
+            Contact
+          </a>
+        </nav>
+
+        <div className="header-actions">
+          <button
+            className="theme-toggle"
+            onClick={() => setDarkMode(!darkMode)}
+            title="Toggle theme"
+          >
+            {darkMode ? <Brightness7 /> : <Brightness4 />}
+          </button>
+          <button
+            className="mobile-menu-toggle"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? <Close /> : <Menu />}
+          </button>
         </div>
       </div>
-    </div>
+    </header>
   )
 }
 
